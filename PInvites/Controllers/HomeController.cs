@@ -3,28 +3,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PInvites.Models;
 
 namespace PInvites.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+
+        public ViewResult Index()
+        {
+            int hour = DateTime.Now.Hour;
+            ViewBag.Greeting = hour < 12 ? "Good Morning" : "Good Afternoon";
+            return View();
+        }
+
+        [HttpGet]
+        public ViewResult RsvpForm()
         {
             return View();
         }
 
-        public ActionResult About()
+        [HttpPost]
+        public ViewResult RsvpForm(GuestResponse guestResponse)
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
+            if (ModelState.IsValid)
+            {
+                // TODO: Email response to the party organizer
+                return View("Thanks", guestResponse);
+            }
+            else
+            {
+                // there is a validation error
+                return View();
+            }
         }
 
-        public ActionResult Contact()
+        public string About()
         {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            return "It's all about me";
         }
+        
     }
 }
